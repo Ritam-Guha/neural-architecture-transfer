@@ -1,7 +1,8 @@
 import os
 import warnings
 from timm.models import create_model
-from timm.data import Dataset, create_loader, resolve_data_config
+from timm.data import create_loader, resolve_data_config
+from timm.data.dataset import ImageDataset as Dataset
 
 
 class ImagenetDataProvider:

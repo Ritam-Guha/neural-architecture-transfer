@@ -56,6 +56,7 @@ def validate(model, loader, criterion, log_freq=50):
     logging.info(' * Acc@1 {:.1f} ({:.3f}) Acc@5 {:.1f} ({:.3f})'.format(
         results['top1'], results['top1_err'], results['top5'], results['top5_err']))
 
+    return results
 
 def main(args):
     setup_default_logging()
@@ -73,6 +74,7 @@ def main(args):
         n_worker=args.workers, image_size=img_size).test
 
     model = NATNet.build_from_config(net_config, pretrained=args.pretrained)
+    # model = NATNet.build_net_via_cfg()
 
     param_count = sum([m.numel() for m in model.parameters()])
     logging.info('Model created, param count: %d' % param_count)
@@ -80,17 +82,15 @@ def main(args):
     model = model.cuda()
     criterion = torch.nn.CrossEntropyLoss().cuda()
 
-    validate(model, test_loader, criterion)
-
-    return
+    return model, validate(model, test_loader, criterion)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     # data related settings
-    parser.add_argument('--data', type=str, default='/mnt/datastore/ILSVRC2012',
+    parser.add_argument('--data', type=str, default='database/cifar10',
                         help='location of the data corpus')
-    parser.add_argument('--dataset', type=str, default='imagenet',
+    parser.add_argument('--dataset', type=str, default='cifar10',
                         help='name of the dataset (imagenet, cifar10, cifar100, ...)')
     parser.add_argument('-j', '--workers', type=int, default=6,
                         help='number of workers for data loading')
@@ -99,7 +99,7 @@ if __name__ == '__main__':
     parser.add_argument('--img-size', type=int, default=224,
                         help='input resolution (128 -> 224)')
     # model related settings
-    parser.add_argument('--model', '-m', metavar='MODEL', default='', type=str,
+    parser.add_argument('--model', '-m', metavar='MODEL', default='subnets/cifar10/net-img@224-flops@468-top1@98.4/net.config', type=str,
                         help='model configuration file')
     parser.add_argument('--no-pretrained', action='store_true', default=False,
                         help='reset classifier')

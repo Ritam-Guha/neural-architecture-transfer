@@ -9,7 +9,6 @@ CINIC-10 is available from https://github.com/BayesWatch/cinic-10
 
 
 class CIFAR10DataProvider:
-
     def __init__(self, save_path=None, train_batch_size=96,
                  test_batch_size=256, valid_size=None,
                  n_worker=2, resize_scale=0.08, distort_color=None,
@@ -33,7 +32,6 @@ class CIFAR10DataProvider:
 
 
 class CIFAR100DataProvider:
-
     def __init__(self, save_path=None, train_batch_size=96,
                  test_batch_size=256, valid_size=None,
                  n_worker=2, resize_scale=0.08, distort_color=None,
